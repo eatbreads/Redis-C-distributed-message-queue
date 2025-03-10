@@ -1,0 +1,56 @@
+# 编译输出文件
+*.o
+*.obj
+*.so
+*.a
+*.lib
+*.dll
+*.exe
+
+# CMake 相关文件
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+
+
+# 编译输出目录
+bin/
+build/
+dist/
+
+# 生成的日志和临时文件
+*.log
+*.tmp
+*.pid
+*.swp
+
+# Redis 相关数据和配置文件
+dump.rdb
+appendonly.aof
+redis.conf
+
+# IDE 相关文件
+.vscode/
+.idea/
+*.iml
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.user
+*.vcxproj*
+*.DS_Store
+
+# vcpkg 相关缓存（如果使用 vcpkg）
+vcpkg_installed/
+vcpkg_buildtrees/
+vcpkg/packages/
+
+# Python 虚拟环境（如果有 Python 相关工具）
+venv/
+__pycache__/
+
+# 其他可能的临时文件
+*.bak
+*.out
+*.err
