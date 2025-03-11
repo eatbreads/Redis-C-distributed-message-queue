@@ -10,48 +10,6 @@
 #include <hiredis/hiredis.h>
 #include <spdlog/spdlog.h>
 
-
-class ITaskProcessor {
-public:
-    virtual ~ITaskProcessor() = default;
-    virtual void process(const Task& task) = 0;
-};
-
-
-class TaskProcessorRegistry {
-public:
-    static void registerProcessor(const std::string& taskType, std::shared_ptr<ITaskProcessor> processor) {
-        processors()[taskType] = processor;
-    }
-
-    static std::shared_ptr<ITaskProcessor> getProcessor(const std::string& taskType) {
-        auto it = processors().find(taskType);
-        return (it != processors().end()) ? it->second : nullptr;
-    }
-
-private:
-    static std::unordered_map<std::string, std::shared_ptr<ITaskProcessor>>& processors() {
-        static std::unordered_map<std::string, std::shared_ptr<ITaskProcessor>> instance;
-        return instance;
-    }
-};
-// 任务处理器示例
-class ImageProcessingTask : public ITaskProcessor {
-public:
-    void process(const Task& task) override {
-        std::cout << "Processing Image: " << task.getParam("image_path") << std::endl;
-        // 实际的图片处理逻辑
-    }
-};
-
-class VideoTranscodingTask : public ITaskProcessor {
-public:
-    void process(const Task& task) override {
-        std::cout << "Transcoding Video: " << task.getParam("video_path") << std::endl;
-        // 实际的视频转码逻辑
-    }
-};
-
 class Task {
 public:
     using Params = std::unordered_map<std::string, std::string>;
@@ -85,6 +43,48 @@ private:
     std::string taskName;
     Params parameters;
 };
+class ITaskProcessor {
+public:
+    virtual ~ITaskProcessor() = default;
+    virtual void process(const Task& task) = 0;
+};
+
+
+class TaskProcessorRegistry {
+public:
+    static void registerProcessor(const std::string& taskType, std::shared_ptr<ITaskProcessor> processor) {
+        processors()[taskType] = processor;
+    }
+
+    static std::shared_ptr<ITaskProcessor> getProcessor(const std::string& taskType) {
+        auto it = processors().find(taskType);
+        return (it != processors().end()) ? it->second : nullptr;
+    }
+
+private:
+    static std::unordered_map<std::string, std::shared_ptr<ITaskProcessor>>& processors() {
+        static std::unordered_map<std::string, std::shared_ptr<ITaskProcessor>> instance;
+        return instance;
+    }
+};  
+// 任务处理器示例
+class ImageProcessingTask : public ITaskProcessor {
+public:
+    void process(const Task& task) override {
+        std::cout << "Processing Image: " << task.getParam("image_path") << std::endl;
+        // 实际的图片处理逻辑
+    }
+};
+
+class VideoTranscodingTask : public ITaskProcessor {
+public:
+    void process(const Task& task) override {
+        std::cout << "Transcoding Video: " << task.getParam("video_path") << std::endl;
+        // 实际的视频转码逻辑
+    }
+};
+
+
 
 class TaskQueue {
 public:
@@ -219,7 +219,6 @@ public:
             }
         }
     }
-
 private:
     TaskQueue& taskQueue;
 };

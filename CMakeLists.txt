@@ -17,6 +17,7 @@ find_package(hiredis CONFIG REQUIRED)
 find_package(Boost REQUIRED COMPONENTS asio)
 find_package(nlohmann_json CONFIG REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
+find_package(GTest REQUIRED)
 # 添加源文件
 add_executable(main main.cpp)
 
@@ -34,6 +35,20 @@ target_link_libraries(main PRIVATE
 
 # 如果你有多个源文件，可以直接在这里添加
 # add_executable(main src/main.cpp src/other_file.cpp)
+# 单元测试
+enable_testing()  # 启用测试功能
+
+add_executable(tests test_taskqueue.cpp)  # 你的单元测试文件
+target_link_libraries(tests PRIVATE 
+    hiredis::hiredis 
+    Boost::asio 
+    nlohmann_json::nlohmann_json 
+    spdlog::spdlog
+    GTest::GTest
+    GTest::Main
+)
+
+add_test(NAME TaskQueueTests COMMAND tests)  # 注册测试
 
 # 设置输出路径为项目根目录
 set_target_properties(main PROPERTIES
